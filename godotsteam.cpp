@@ -8439,9 +8439,10 @@ Array Steam::getLeaderboardEntries(){
 String Steam::filterText(int context, uint64_t steam_id, const String& message){
 	String new_message = "";
 	if(SteamUtils() != NULL){
-		char *filtered = new char[2048];
+		auto utf8_input = message.utf8();
+		char *filtered = new char[utf8_input.length() + 1];
 		CSteamID source_id = (uint64)steam_id;
-		SteamUtils()->FilterText((ETextFilteringContext)context, source_id, message.utf8().get_data(), filtered, strlen(filtered)+1);
+		SteamUtils()->FilterText((ETextFilteringContext)context, source_id, utf8_input.get_data(), filtered, utf8_input.length() + 1);
 		new_message = filtered;
 		delete[] filtered;
 	}
